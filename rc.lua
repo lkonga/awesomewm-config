@@ -4,15 +4,16 @@ Multicolor Awesome WM config 2.0
 github.com/copycat-killer        
 
 --]]
-    
+
 -- {{{ Required libraries
 local gears     = require("gears")
 local awful     = require("awful")
 awful.rules     = require("awful.rules")
 require("awful.autofocus")
--- Load the pulseaudio volume widget. https://github.com/mokasin/apw
+-- Load the pulseaudio volume widget - https://github.com/mokasin/apw
 local APW = require("apw/widget")
-
+-- Net widget - https://github.com/plotnikovanton/net_widgets
+local net_widgets = require("net_widgets")
 local wibox     = require("wibox")
 local beautiful = require("beautiful")
 local naughty   = require("naughty")
@@ -40,7 +41,7 @@ do
     end)
 end
 -- }}}
--- Run unagi composite manager 
+-- Run unagi composite manager (required for true transparency) 
 awful.util.spawn_with_shell("unagi &")
 -- {{{ Autostart applications
 function run_once(cmd)
@@ -94,7 +95,7 @@ local layouts = {
 -- {{{ Tags
 tags = {
     names = { "term", "www", "fileman", "im", "editor", "vm", "media", "other" },
-    layout = { layouts[3], layouts[1], layouts[1], layouts[6], layouts[1], layouts[7], layouts[1], layouts[1] }
+    layout = { layouts[2], layouts[2], layouts[1], layouts[6], layouts[1], layouts[7], layouts[1], layouts[1] }
 }
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
@@ -186,7 +187,7 @@ cpuwidget = lain.widgets.cpu({
     end
 })
 
----- Coretemp
+---- Coretemp - steady showing 14º, not working?
 --tempicon = wibox.widget.imagebox(beautiful.widget_temp)
 --tempwidget = lain.widgets.temp({
 --    settings = function()
@@ -237,6 +238,15 @@ cpuwidget = lain.widgets.cpu({
 --        netdowninfo:set_markup(markup("#87af5f", net_now.received .. " "))
 --    end
 --})
+
+-- create wireless net widget - https://github.com/plotnikovanton/net_widgets
+net_wireless = net_widgets.wireless({interface="wlan0"})
+
+-- create wired net widget - https://github.com/plotnikovanton/net_widgets
+net_wired = net_widgets.indicator({
+    interfaces  = {"eth0", "another_interface", "and_another_one"},
+    timeout     = 5
+})
 
 -- MEM
 memicon = wibox.widget.imagebox(beautiful.widget_mem)
@@ -372,6 +382,9 @@ for s = 1, screen.count() do
     --right_layout:add(volumewidget)
     -- Example: Add to wibox. Here to the right. Do it the way you like it.
     right_layout:add(APW)
+    -- add wireless widget 
+    right_layout:add(net_wireless)
+    right_layout:add(net_wired)
     right_layout:add(memicon)
     right_layout:add(memwidget)
     right_layout:add(cpuicon)
@@ -380,8 +393,8 @@ for s = 1, screen.count() do
     right_layout:add(fswidget)
     --right_layout:add(weathericon)
     --right_layout:add(myweather)
-    right_layout:add(tempicon)
-    right_layout:add(tempwidget)
+    --right_layout:add(tempicon)
+    --right_layout:add(tempwidget)
     --right_layout:add(baticon)
     --right_layout:add(batwidget)
     right_layout:add(clockicon)
@@ -484,7 +497,7 @@ awful.key({ modkey }, "b", function ()
     mybottomwibox[mouse.screen].visible = not mybottomwibox[mouse.screen].visible
 end),
 
--- Layout manipulation
+-- Layout manipulation - it overrides default keybindings
 awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
 awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end),
 awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),

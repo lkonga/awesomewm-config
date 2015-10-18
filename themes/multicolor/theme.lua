@@ -10,7 +10,8 @@
 theme                               = {}
 
 theme.confdir                       = os.getenv("HOME") .. "/.config/awesome/themes/multicolor"
-theme.wallpaper                     = theme.confdir .. "/wall.png"
+--theme.wallpaper                     = theme.confdir .. "/wall.png"
+theme.wallpaper                     = theme.confdir .. "/cyberpunk_by_cuber-d6ydb09.jpg"
 
 theme.font                          = "Terminus 8"
 --theme.taglist_font                =
