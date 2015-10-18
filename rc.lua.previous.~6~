@@ -1,8 +1,8 @@
 --[[
-                                     
-     Blackburn Awesome WM config 2.0 
-     github.com/copycat-killer       
-                                     
+                                   
+     Dremora Awesome WM config 2.0 
+     github.com/copycat-killer     
+                                   
 --]]
 
 -- {{{ Required libraries
@@ -55,7 +55,7 @@ run_once("unclutter -root")
 -- {{{ Variable definitions
 
 -- beautiful init
-beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/blackburn/theme.lua")
+beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/dremora/theme.lua")
 
 -- common
 modkey     = "Mod4"
@@ -104,13 +104,15 @@ mymainmenu = awful.menu.new({ items = require("menugen").build_menu(),
 
 -- {{{ Wibox
 markup = lain.util.markup
-gray   = "#9E9C9A"
+white  = beautiful.fg_focus
+gray   = "#858585"
 
 -- Textclock
-mytextclock = awful.widget.textclock(" %H:%M ")
+mytextclock = awful.widget.textclock(markup(gray, " %a")
+.. markup(white, " %d ") .. markup(gray, "%b ") ..  markup(white, "%H:%M "))
 
 -- Calendar
-lain.widgets.calendar:attach(mytextclock)
+lain.widgets.calendar:attach(mytextclock, { fg = white })
 
 --[[ Mail IMAP check
 -- commented because it needs to be set before use
@@ -120,6 +122,7 @@ mailwidget = lain.widgets.imap({
     mail     = "mail",
     password = "keyring get mail",
     settings = function()
+        mail_notification_preset.fg = white
         mail  = ""
         count = ""
 
@@ -128,7 +131,7 @@ mailwidget = lain.widgets.imap({
             count = mailcount .. " "
         end
 
-        widget:set_markup(markup(gray, mail) .. count)
+        widget:set_markup(markup(gray, mail) .. markup(white, count))
     end
 })
 ]]
@@ -136,18 +139,19 @@ mailwidget = lain.widgets.imap({
 -- MPD
 mpdwidget = lain.widgets.mpd({
     settings = function()
+        mpd_notification_preset.fg = white
         artist = mpd_now.artist .. " "
-        title  = mpd_now.title  .. "  "
+        title  = mpd_now.title  .. " "
 
         if mpd_now.state == "pause" then
             artist = "mpd "
-            title  = "paused  "
+            title  = "paused "
         elseif mpd_now.state == "stop" then
             artist = ""
             title  = ""
         end
 
-        widget:set_markup(markup(gray, artist) .. title)
+        widget:set_markup(markup(gray, artist) .. markup(white, title))
     end
 })
 
@@ -155,6 +159,7 @@ mpdwidget = lain.widgets.mpd({
 fshome = lain.widgets.fs({
     partition = "/home",
     settings  = function()
+        fs_notification_preset.fg = white
         fs_header = ""
         fs_p      = ""
 
@@ -163,46 +168,46 @@ fshome = lain.widgets.fs({
             fs_p      = fs_now.used
         end
 
-        widget:set_markup(markup(gray, fs_header) .. fs_p)
+        widget:set_markup(markup(gray, fs_header) .. markup(white, fs_p))
     end
 })
 
 -- Battery
---batwidget = lain.widgets.bat({
---    settings = function()
---        bat_header = " Bat "
---        bat_p      = bat_now.perc .. " "
---
---        if bat_now.status == "Not present" then
---            bat_header = ""
---            bat_p      = ""
---        end
---
---        widget:set_markup(markup(gray, bat_header) .. bat_p)
---    end
---})
+batwidget = lain.widgets.bat({
+    settings = function()
+        bat_header = " Bat "
+        bat_p      = bat_now.perc .. " "
+
+        if bat_now.status == "Not present" then
+            bat_header = ""
+            bat_p      = ""
+        end
+
+        widget:set_markup(markup(gray, bat_header) .. markup(white, bat_p))
+    end
+})
 
 -- ALSA volume
 volumewidget = lain.widgets.alsa({
     settings = function()
         header = " Vol "
-        level  = volume_now.level
+        vlevel  = volume_now.level
 
         if volume_now.status == "off" then
-            level = level .. "M "
+            vlevel = vlevel .. "M "
         else
-            level = level .. " "
+            vlevel = vlevel .. " "
         end
 
-        widget:set_markup(markup(gray, header) .. level)
+        widget:set_markup(markup(gray, header) .. markup(white, vlevel))
     end
 })
 
+-- Weather
 myweather = lain.widgets.weather({
     city_id = 123456, -- placeholder
     settings = function()
-        units = math.floor(weather_now["main"]["temp"])
-        widget:set_text(" " .. units .. " ")
+        w_notification_preset.fg = white
     end
 })
 
@@ -297,10 +302,8 @@ for s = 1, screen.count() do
     right_layout:add(first)
     right_layout:add(mpdwidget)
     --right_layout:add(mailwidget)
-    right_layout:add(myweather.icon)
-    right_layout:add(myweather)
     right_layout:add(fshome)
-    --right_layout:add(batwidget)
+    right_layout:add(batwidget)
     right_layout:add(volumewidget)
     right_layout:add(mytextclock)
 
@@ -311,9 +314,6 @@ for s = 1, screen.count() do
     layout:set_right(right_layout)
 
     mywibox[s]:set_widget(layout)
-
-    -- Set proper background, instead of beautiful.bg_normal
-    mywibox[s]:set_bg(beautiful.topbar_path .. math.floor(screen[mouse.screen].workarea.width) .. ".png")
 end
 -- }}}
 
@@ -510,7 +510,7 @@ clientkeys = awful.util.table.join(
 )
 
 -- Bind all key numbers to tags.
--- Be careful: we use keycodes to make it works on any keyboard layout.
+-- be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, 9 do
     globalkeys = awful.util.table.join(globalkeys,
@@ -598,7 +598,7 @@ awful.rules.rules = {
 -- }}}
 
 -- {{{ Signals
--- signal function to execute when a new client appears.
+-- Signal function to execute when a new client appears.
 local sloppyfocus_last = {c=nil}
 client.connect_signal("manage", function (c, startup)
     -- Enable sloppy focus
@@ -613,7 +613,7 @@ client.connect_signal("manage", function (c, startup)
          end
      end)
 
-    local titlebars_enabled = false
+    local titlebars_enabled = true
     if titlebars_enabled and (c.type == "normal" or c.type == "dialog") then
         -- buttons for the titlebar
         local buttons = awful.util.table.join(
@@ -629,27 +629,17 @@ client.connect_signal("manage", function (c, startup)
                 end)
                 )
 
-        -- widgets that are aligned to the right
-        local right_layout = wibox.layout.fixed.horizontal()
-        right_layout:add(awful.titlebar.widget.floatingbutton(c))
-        right_layout:add(awful.titlebar.widget.maximizedbutton(c))
-        right_layout:add(awful.titlebar.widget.stickybutton(c))
-        right_layout:add(awful.titlebar.widget.ontopbutton(c))
-        right_layout:add(awful.titlebar.widget.closebutton(c))
-
-        -- the title goes in the middle
+        -- Title in the middle
         local middle_layout = wibox.layout.flex.horizontal()
         local title = awful.titlebar.widget.titlewidget(c)
         title:set_align("center")
         middle_layout:add(title)
         middle_layout:buttons(buttons)
 
-        -- now bring it all together
         local layout = wibox.layout.align.horizontal()
-        layout:set_right(right_layout)
         layout:set_middle(middle_layout)
 
-        awful.titlebar(c,{size=16}):set_widget(layout)
+        awful.titlebar(c,{size=18}):set_widget(layout)
     end
 end)
 
