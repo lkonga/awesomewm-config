@@ -1,5 +1,5 @@
 ===================
-Awesome WM Copycats
+My Backup Config Awesome WM Copycats
 ===================
 
 --------------------------

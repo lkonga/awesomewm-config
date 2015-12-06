@@ -5,7 +5,9 @@ volume_widget = wibox.widget.textbox()
 volume_widget:set_align("right")
 
 function update_volume(widget)
-   local fd = io.popen("amixer sget Master")
+   --local fd = io.popen("amixer sget Master")
+   local fd = io.popen("amixer sget IEC958")
+
    local status = fd:read("*all")
    fd:close()
 

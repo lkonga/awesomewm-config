@@ -9,7 +9,8 @@
 theme                               = {}
 
 themes_dir                          = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-darker"
-theme.wallpaper                     = themes_dir .. "/wall.png"
+--theme.wallpaper                     = themes_dir .. "/wall.png"
+theme.wallpaper                     = themes_dir .. "/cyberpunk_by_cuber-d6ydb09.jpg"
 
 theme.font                          = "Terminus 9"
 theme.fg_normal                     = "#DDDDFF"
@@ -24,8 +25,12 @@ theme.border_focus                  = "#7F7F7F"
 theme.border_marked                 = "#CC9393"
 theme.titlebar_bg_focus             = "#FFFFFF"
 theme.titlebar_bg_normal            = "#FFFFFF"
+theme.taglist_bg_focus              = "#313131"
+-- what is this?
+theme.taglist_fg_normal             = "#00FF11"
+
 theme.taglist_fg_focus              = "#D8D782"
-theme.tasklist_bg_focus             = "#1A1A1A"
+theme.tasklist_bg_focus             = "#313131"
 theme.tasklist_fg_focus             = "#D8D782"
 theme.textbox_widget_margin_top     = 1
 theme.notify_fg                     = theme.fg_normal
