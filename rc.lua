@@ -76,8 +76,8 @@ beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-darker/t
 -- common
 modkey     = "Mod4"
 altkey     = "Mod1"
-terminal2   = "urxvtc" or "xterm"
-terminal   = "sakura"
+terminal   = "urxvtc" or "xterm"
+--terminal   = "sakura"
 --terminal2   = "terminator"
 editor     = os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
@@ -89,7 +89,7 @@ gui_editor = "gvim"
 graphics   = "gimp"
 mail       = terminal .. " -e mutt "
 iptraf     = terminal .. " -g 180x54-20+34 -e sudo iptraf-ng -i all "
-musicplr   = terminal2 .. " -g 130x34-320+16 -e ncmpcpp "
+musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp "
 
 --local layouts = {
 --    awful.layout.suit.floating,
